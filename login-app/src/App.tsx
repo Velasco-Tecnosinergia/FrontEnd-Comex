@@ -1,9 +1,10 @@
-import { useState, type JSX } from 'react'
+//import { useState } from 'react'
+//import reactLogo from './assets/react.svg'
+//import viteLogo from '/vite.svg'
 import './App.css'
+
 import Login from "./Login";
 
-export default function App(): JSX.Element {
+export default function App() {
   return <Login />;
 }
-
-
