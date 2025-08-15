@@ -26,7 +26,7 @@ export default function Login(): JSX.Element {
       <div className="bg-white/50 backdrop-blur-md p-8 rounded-2xl shadow-xl w-96 animate-fadeIn">
         <img
             alt="Your Company"
-            src="img/uniview_mexico.png"
+            src="/src/assets/uniview_mexico.png"
             className="mx-auto h-10 w-auto"
         />
         <h2 className="text-3xl font-bold text-center mb-6 text-sky-950">
