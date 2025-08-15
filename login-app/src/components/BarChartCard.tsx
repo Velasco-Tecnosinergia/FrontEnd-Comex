@@ -8,7 +8,7 @@ interface BarChartCardProps {
 export default function BarChartCard({ title, data }: BarChartCardProps) {
   return (
     <div className="bg-white p-4 rounded-lg shadow h-80">
-      <h3 className="text-gray-700 mb-4">{title}</h3>
+      <h3 className="text-indigo-950 mb-4 font-bold">{title}</h3>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -16,9 +16,9 @@ export default function BarChartCard({ title, data }: BarChartCardProps) {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="Llegaron" fill="#1A8057" />
-          <Bar dataKey="Dejaron" fill="#DEB500" />
-          <Bar dataKey="Presentes" fill="#9C1A15" />
+          <Bar dataKey="Llegaron" fill="#191970" />
+          <Bar dataKey="Dejaron" fill="#FFB93B" />
+          <Bar dataKey="Presentes" fill="#992435" />
         </BarChart>
       </ResponsiveContainer>
     </div>
