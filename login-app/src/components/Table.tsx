@@ -3,47 +3,29 @@ import { Eye, Download, FileDown, FileSpreadsheet } from "lucide-react";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-
-const rows = [
-  { date: "2025-08-01", entered: 120, left: 100, present: 20, result: "OK" },
-  { date: "2025-08-02", entered: 150, left: 130, present: 20, result: "OK" },
-  { date: "2025-08-03", entered: 110, left: 90, present: 20, result: "OK" },
-  { date: "2025-08-04", entered: 180, left: 160, present: 20, result: "OK" },
-  { date: "2025-08-05", entered: 200, left: 150, present: 50, result: "Alert" },
-  { date: "2025-08-06", entered: 95, left: 90, present: 5, result: "OK" },
-  { date: "2025-08-07", entered: 140, left: 120, present: 20, result: "OK" },
-  { date: "2025-08-08", entered: 120, left: 100, present: 20, result: "OK" },
-  { date: "2025-08-09", entered: 150, left: 130, present: 20, result: "OK" },
-  { date: "2025-08-10", entered: 110, left: 90, present: 20, result: "OK" },
-  { date: "2025-08-11", entered: 180, left: 160, present: 20, result: "OK" },
-  { date: "2025-08-12", entered: 200, left: 150, present: 50, result: "Alert" },
-  { date: "2025-08-13", entered: 95, left: 90, present: 5, result: "OK" },
-  { date: "2025-08-14", entered: 140, left: 120, present: 20, result: "OK" },
-];
+import { tableData } from "../data/tableData";
 
 const rowsPerPage = 10;
 
 export default function Table() {
   const [page, setPage] = useState(1);
-  const totalPages = Math.ceil(rows.length / rowsPerPage);
+  const totalPages = Math.ceil(tableData.length / rowsPerPage);
   const start = (page - 1) * rowsPerPage;
-  const selectedRows = rows.slice(start, start + rowsPerPage);
+  const selectedRows = tableData.slice(start, start + rowsPerPage);
 
-  // Exportar a Excel
   const exportToExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const worksheet = XLSX.utils.json_to_sheet(tableData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
     XLSX.writeFile(workbook, "table-data.xlsx");
   };
 
-  // Exportar a PDF
   const exportToPDF = () => {
     const doc = new jsPDF();
     doc.text("Table Data", 14, 10);
     (doc as any).autoTable({
       head: [["Date", "Entered", "Left", "Present", "Result"]],
-      body: rows.map((r) => [r.date, r.entered, r.left, r.present, r.result]),
+      body: tableData.map((r) => [r.date, r.entered, r.left, r.present, r.result]),
     });
     doc.save("table-data.pdf");
   };
