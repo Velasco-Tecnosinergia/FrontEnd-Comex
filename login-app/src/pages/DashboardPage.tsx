@@ -5,6 +5,7 @@ import BarChartCard from "../components/BarChartCard";
 import LineChartCard from "../components/LineChartCard";
 import { barData } from "../data/barData";
 import { lineData } from "../data/lineData";
+import Table from "../components/Table";
 
 export default function Dashboard() {
   return (
@@ -18,9 +19,13 @@ export default function Dashboard() {
       </div>
 
       {/* Gráficas */}
-      <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 ">
         <BarChartCard title="Clientes Presentes" data={barData} />
         <LineChartCard title="Clientes Totales" data={lineData} />
+      </div>
+
+      <div className="pt-8">
+        <Table />
       </div>
     </DashboardLayout>
   );
