@@ -7,8 +7,8 @@ interface BarChartCardProps {
 
 export default function BarChartCard({ title, data }: BarChartCardProps) {
   return (
-    <div className="bg-white p-4 rounded-lg shadow h-80">
-      <h3 className="text-indigo-950 mb-4 font-bold">{title}</h3>
+    <div className="bg-white p-4 rounded-lg shadow h-96">
+      <h3 className="text-indigo-950 mb-0 font-bold">{title}</h3>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
