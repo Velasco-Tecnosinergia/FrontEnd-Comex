@@ -1,5 +1,7 @@
-import { FaHome, FaFolder, FaChartPie } from "react-icons/fa";
+// src/components/Sidebar.tsx
+import { FaHome, FaFolder, FaChartPie, FaCity } from "react-icons/fa";
 import React from "react";
+import { Link } from "react-router-dom"; // Importamos Link
 
 type SidebarProps = {
   className?: string; // el layout le inyecta posicionamiento/animación
@@ -13,7 +15,11 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "" }) => {
       {/* Avatar */}
       <div className="flex flex-col items-center mb-8">
         <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg mb-3">
-          <svg className="w-10 h-10 text-blue-800" fill="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-10 h-10 text-blue-800"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               fillRule="evenodd"
               d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v1.6h19.2v-1.6c0-3.2-6.4-4.8-9.6-4.8z"
@@ -22,20 +28,31 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "" }) => {
           </svg>
         </div>
         <h2 className="text-lg font-bold">JAIR VELASCO</h2>
-        <p className="text-sm text-blue-200">jair.velasco@tecnosinergia.com</p>
+        <p className="text-sm text-blue-200">
+          jair.velasco@tecnosinergia.com
+        </p>
       </div>
 
       {/* Menu */}
       <nav className="space-y-4 w-full">
-        <a href="#" className="flex items-center gap-3 hover:bg-indigo-500 px-3 py-2 rounded-lg">
+        <Link
+          to="../dashboard"
+          className="flex items-center gap-3 hover:bg-indigo-500 px-3 py-2 rounded-lg"
+        >
           <FaHome /> <span>Inicio</span>
-        </a>
-        <a href="#" className="flex items-center gap-3 hover:bg-indigo-500 px-3 py-2 rounded-lg">
+        </Link>
+        <Link
+          to="../reportes"
+          className="flex items-center gap-3 hover:bg-indigo-500 px-3 py-2 rounded-lg"
+        >
           <FaFolder /> <span>Reportes</span>
-        </a>
-        <a href="#" className="flex items-center gap-3 hover:bg-indigo-500 px-3 py-2 rounded-lg">
-          <FaChartPie /> <span>Gráficas</span>
-        </a>
+        </Link>
+        <Link
+          to="../branches"
+          className="flex items-center gap-3 hover:bg-red-500 px-3 py-2 rounded-lg"
+        >
+          <FaCity /> <span>Sucursales</span>
+        </Link>
       </nav>
     </aside>
   );
