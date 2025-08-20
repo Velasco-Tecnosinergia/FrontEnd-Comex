@@ -1,5 +1,5 @@
 // src/components/Sidebar.tsx
-import { FaHome, FaFolder, FaChartPie, FaCity } from "react-icons/fa";
+import { FaHome, FaFolder, FaCity } from "react-icons/fa";
 import React from "react";
 import { Link } from "react-router-dom"; // Importamos Link
 
@@ -49,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "" }) => {
         </Link>
         <Link
           to="../branches"
-          className="flex items-center gap-3 hover:bg-red-500 px-3 py-2 rounded-lg"
+          className="flex items-center gap-3 hover:bg-indigo-500 px-3 py-2 rounded-lg"
         >
           <FaCity /> <span>Sucursales</span>
         </Link>
