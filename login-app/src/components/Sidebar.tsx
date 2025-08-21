@@ -42,7 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className = "" }) => {
           <FaHome /> <span>Inicio</span>
         </Link>
         <Link
-          to="../reportes"
+          to="../reports"
           className="flex items-center gap-3 hover:bg-indigo-500 px-3 py-2 rounded-lg"
         >
           <FaFolder /> <span>Reportes</span>

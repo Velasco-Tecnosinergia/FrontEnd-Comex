@@ -14,6 +14,7 @@ import { pieData4 } from  "../data/pieData4"
 export default function Dashboard() {
   return (
     <DashboardLayout title="Dashboard de Usuario">
+      <h1 className="text-2xl font-bold mb-2 text-indigo-900">Dashboard Principal</h1>
       {/* Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
         <Card title="Camara 1" value="1,002,500" />
