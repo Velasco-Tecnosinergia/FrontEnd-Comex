@@ -38,7 +38,7 @@ export default function DashboardLayout({ children, title = "Dashboard" }: Dashb
         </header>
 
         {/* Main */}
-        <main className="p-6">{children}</main>
+        <main className="p-4">{children}</main>
       </div>
     </div>
   );
