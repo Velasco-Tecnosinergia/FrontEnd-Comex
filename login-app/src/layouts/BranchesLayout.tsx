@@ -38,7 +38,7 @@ export default function BranchesLayout({ children, title = "Sucursales" }: Branc
         </header>
 
         {/* Main */}
-        <main className="p-6">{children}</main>
+        <main className="p-4">{children}</main>
       </div>
     </div>
   );
