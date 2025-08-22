@@ -35,7 +35,7 @@ export default function FilterDropdown({
     <div className="relative inline-block text-left">
       <button
         type="button"
-        className="w-40 justify-between inline-flex items-center rounded-md border px-3 py-2 text-sm font-medium bg-white hover:bg-gray-50 shadow-sm"
+        className="w-40 justify-between inline-flex items-center rounded-md border px-3 py-2 text-sm font-medium bg-white hover:bg-indigo-100 shadow-sm"
         onClick={() => setOpen((prev) => !prev)}
       >
         {label} {selected.length > 0 ? `(${selected.length})` : ""}
@@ -68,7 +68,7 @@ export default function FilterDropdown({
           {options.map((option) => (
             <label
               key={option}
-              className="flex items-center gap-2 px-3 py-2 text-sm cursor-pointer hover:bg-gray-50"
+              className="flex items-center gap-2 px-3 py-2 text-sm cursor-pointer hover:bg-indigo-100"
             >
               <input
                 type="checkbox"
