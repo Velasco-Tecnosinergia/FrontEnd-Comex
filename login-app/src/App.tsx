@@ -12,6 +12,7 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/branches" element={<BranchesPage />} />
         <Route path="/reports" element={<ReportsPage />} />
