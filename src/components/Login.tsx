@@ -1,20 +1,28 @@
 import { useState, type JSX } from "react";
+import { login } from "../service/authService";
 
 export default function Login(): JSX.Element {
-  const [email, setEmail] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  const handleLogin = (): void => {
-    if (!email || !password) {
+  const handleLogin = async (): Promise<void> => {
+    if (!username || !password) {
       setError("Por favor, completa todos los campos.");
       return;
     }
 
-    if (email === "admin" && password === "1234") {
+    try {
+      const response = await login(username, password);
+      console.log("✅ Login exitoso:", response);
+
+      // Guardamos el token en localStorage (para futuras peticiones)
+      localStorage.setItem("token", response.access_token);
+
       alert("Login exitoso 🎉");
-    } else {
-      setError("Credenciales incorrectas.");
+      setError(""); // limpiar errores
+    } catch (err: any) {
+      setError(err.message || "Error en el login");
     }
   };
 
@@ -61,9 +69,9 @@ export default function Login(): JSX.Element {
 
           <input
             type="email"
-            placeholder="Correo electrónico"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Usuario"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="w-full border-b-2 border-gray-300 focus:border-indigo-700 outline-none py-2 mb-6 text-gray-700 bg-transparent"
           />
 
