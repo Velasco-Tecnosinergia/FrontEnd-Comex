@@ -7,32 +7,36 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
-  const handleLogin = async () => {
-    if (!username || !password) {
-      setError("Por favor, completa todos los campos.");
-      return;
+const handleLogin = async () => {
+  if (!username || !password) {
+    setError("Por favor, completa todos los campos.");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://127.0.0.1:8000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Credenciales incorrectas");
     }
 
-    try {
-      const response = await fetch("http://127.0.0.1:8000/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
+    const data = await response.json();
+    console.log("✅ Login exitoso:", data);
 
-      if (!response.ok) {
-        throw new Error("Credenciales incorrectas");
-      }
+    // Redirigir al dashboard
+    window.location.href = "/dashboard";
+  } catch (err) {
+    console.error("❌ Error en login:", err);
+    setError("Credenciales incorrectas.");
+  }
+};
 
-      const data = await response.json();
-      console.log("Login exitoso:", data);
-
-      // Redirigir al dashboard
-      window.location.href = "/dashboard";
-    } catch (err) {
-      setError("Credenciales incorrectas.");
-    }
-  };
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
