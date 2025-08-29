@@ -1,28 +1,36 @@
-import { useState, type JSX } from "react";
-import { login } from "../service/authService";
+import { useState} from "react";
+import { Eye, EyeOff } from "lucide-react";
 
-export default function Login(): JSX.Element {
+export default function Login() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
-  const handleLogin = async (): Promise<void> => {
+  const handleLogin = async () => {
     if (!username || !password) {
       setError("Por favor, completa todos los campos.");
       return;
     }
 
     try {
-      const response = await login(username, password);
-      console.log("✅ Login exitoso:", response);
+      const response = await fetch("http://127.0.0.1:8000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-      // Guardamos el token en localStorage (para futuras peticiones)
-      localStorage.setItem("token", response.access_token);
+      if (!response.ok) {
+        throw new Error("Credenciales incorrectas");
+      }
 
-      alert("Login exitoso 🎉");
-      setError(""); // limpiar errores
-    } catch (err: any) {
-      setError(err.message || "Error en el login");
+      const data = await response.json();
+      console.log("Login exitoso:", data);
+
+      // Redirigir al dashboard
+      window.location.href = "/dashboard";
+    } catch (err) {
+      setError("Credenciales incorrectas.");
     }
   };
 
@@ -67,21 +75,32 @@ export default function Login(): JSX.Element {
             <span className="text-indigo-700 font-semibold">Login</span> a tu cuenta
           </p>
 
+          {/* Usuario */}
           <input
-            type="email"
+            type="text"
             placeholder="Usuario"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full border-b-2 border-gray-300 focus:border-indigo-700 outline-none py-2 mb-6 text-gray-700 bg-transparent"
+            className="w-full border-b-2 border-gray-300 focus:border-indigo-700 outline-none py-2 mb-6 text-gray-700"
           />
 
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full border-b-2 border-gray-300 focus:border-indigo-700 outline-none py-2 mb-6 text-gray-700 bg-transparent"
-          />
+          {/* Contraseña con icono */}
+          <div className="relative mb-6">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full border-b-2 border-gray-300 focus:border-indigo-700 outline-none py-2 text-gray-700 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-2 top-2 text-gray-500 hover:text-indigo-700"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
 
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
@@ -109,3 +128,4 @@ export default function Login(): JSX.Element {
     </div>
   );
 }
+
