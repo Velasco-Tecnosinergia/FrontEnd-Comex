@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Card from "../components/Card";
 import BarChartCard from "../components/BarChartCard";
@@ -9,9 +10,23 @@ import Table from "../components/Table";
 import { pieData1 } from "../data/pieData1";
 import { pieData2 } from "../data/pieData2";
 import { pieData3 } from "../data/pieData3";
-import { pieData4 } from  "../data/pieData4"
+import { pieData4 } from  "../data/pieData4";
 
 export default function Dashboard() {
+  useEffect(() => {
+  const storedData = localStorage.getItem("loginData");
+  if (storedData) {
+    const parsed = JSON.parse(storedData);
+    console.log("📦 Datos guardados:", parsed);
+
+    // 👀 Aquí ves la respuesta del PUT
+    if (parsed.remote_response) {
+      console.log("🔹 Respuesta del PUT remoto:", parsed.remote_response);
+    }
+  }
+}, []);
+
+
   return (
     <DashboardLayout title="Dashboard de Usuario">
       <h1 className="text-2xl font-bold mb-2 text-indigo-900">Dashboard Principal</h1>
