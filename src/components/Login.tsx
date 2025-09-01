@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
@@ -7,7 +7,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
-const handleLogin = async () => {
+  const handleLogin = async () => {
   if (!username || !password) {
     setError("Por favor, completa todos los campos.");
     return;
@@ -28,6 +28,9 @@ const handleLogin = async () => {
 
     const data = await response.json();
     console.log("✅ Login exitoso:", data);
+
+    // Guardar TODO en localStorage (incluyendo remote_response)
+    localStorage.setItem("loginData", JSON.stringify(data));
 
     // Redirigir al dashboard
     window.location.href = "/dashboard";
@@ -132,4 +135,3 @@ const handleLogin = async () => {
     </div>
   );
 }
-
