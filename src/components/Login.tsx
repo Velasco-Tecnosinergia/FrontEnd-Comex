@@ -8,38 +8,45 @@ export default function Login() {
   const [error, setError] = useState<string>("");
 
   const handleLogin = async () => {
-  if (!username || !password) {
-    setError("Por favor, completa todos los campos.");
-    return;
-  }
-
-  try {
-    const response = await fetch("http://127.0.0.1:8000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Credenciales incorrectas");
+    if (!username || !password) {
+      setError("Por favor, completa todos los campos.");
+      return;
     }
 
-    const data = await response.json();
-    console.log("✅ Login exitoso:", data);
+    try {
+      const response = await fetch("http://127.0.0.1:8000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-    // Guardar TODO en localStorage (incluyendo remote_response)
-    localStorage.setItem("loginData", JSON.stringify(data));
+      if (!response.ok) {
+        throw new Error("Credenciales incorrectas");
+      }
 
-    // Redirigir al dashboard
-    window.location.href = "/dashboard";
-  } catch (err) {
-    console.error("❌ Error en login:", err);
-    setError("Credenciales incorrectas.");
-  }
-};
+      const data = await response.json();
+      console.log("✅ Login exitoso:", data);
 
+      // Guardar TODO en localStorage
+      localStorage.setItem("credentials", JSON.stringify(data.credentials));
+      localStorage.setItem("statistics", JSON.stringify(data.statistics));
+      localStorage.setItem("remote_response", JSON.stringify(data.remote_response));
+      if (data.progress_response) {
+        localStorage.setItem("progress_response", JSON.stringify(data.progress_response));
+      }
+
+      // También guardar todo junto si lo necesitas
+      localStorage.setItem("loginData", JSON.stringify(data));
+
+      // Redirigir al dashboard
+      window.location.href = "/dashboard";
+    } catch (err) {
+      console.error("❌ Error en login:", err);
+      setError("Credenciales incorrectas.");
+    }
+  };
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
