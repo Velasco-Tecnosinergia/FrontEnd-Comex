@@ -14,59 +14,52 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/login", {
+      // Paso 1: Login
+      const loginResp = await fetch("http://127.0.0.1:8000/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
-      if (!response.ok) {
-        throw new Error("Credenciales incorrectas");
-      }
+      if (!loginResp.ok) throw new Error("Credenciales incorrectas");
 
-      const data = await response.json();
-      console.log("✅ Login exitoso:", data);
+      const loginData = await loginResp.json();
+      console.log("✅ Login exitoso:", loginData);
 
-      // Guardar datos en localStorage
-      if (data.credentials) {
-        localStorage.setItem("credentials", JSON.stringify(data.credentials));
-      }
-      if (data.statistics) {
-        localStorage.setItem("statistics", JSON.stringify(data.statistics));
-      }
-      if (data.remote_response) {
-        localStorage.setItem("remote_response", JSON.stringify(data.remote_response));
-      }
-      if (data.progress_response) {
-        localStorage.setItem("progress_response", JSON.stringify(data.progress_response));
-      }
-      if (data.final_statistics) {
-        localStorage.setItem("final_statistics", JSON.stringify(data.final_statistics));
-      }
+      // Paso 2: Fetch estadísticas
+      const statsResp = await fetch("http://127.0.0.1:8000/statistics/fetch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-      // También guardar todo junto
-      localStorage.setItem("loginData", JSON.stringify(data));
+      if (!statsResp.ok) throw new Error("Error al obtener estadísticas");
+
+      const statsData = await statsResp.json();
+      console.log("📊 Estadísticas:", statsData);
+
+      // Guardar en localStorage
+      localStorage.setItem("user", JSON.stringify(loginData));
+      localStorage.setItem("statistics", JSON.stringify(statsData));
 
       // Redirigir al dashboard
       window.location.href = "/dashboard";
     } catch (err) {
       console.error("❌ Error en login:", err);
-      setError("Credenciales incorrectas.");
+      setError("Credenciales incorrectas o fallo en estadísticas.");
     }
   };
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
-      {/* Panel izquierdo con degradado y ondas */}
+      {/* Panel izquierdo */}
       <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-indigo-900 via-indigo-700 to-indigo-500 items-center justify-center relative overflow-hidden">
         <div className="text-center text-white px-6 z-10">
           <h1 className="text-4xl font-bold mb-4">Pagina de Bienvenida</h1>
           <p className="text-lg opacity-80">Inicia sesión en tu cuenta</p>
         </div>
 
-        {/* Ondas con SVG */}
+        {/* Ondas animadas */}
         <svg
           className="absolute bottom-0 left-0 w-full"
           xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +83,7 @@ export default function Login() {
         </svg>
       </div>
 
-      {/* Panel derecho - Login */}
+      {/* Panel derecho */}
       <div className="flex w-full md:w-1/2 items-center justify-center p-8 bg-white">
         <div className="w-full max-w-md bg-white/80 backdrop-blur-md p-8 rounded-xl shadow-xl">
           <h2 className="text-3xl font-bold text-indigo-900 mb-2">Hola!</h2>
@@ -107,7 +100,7 @@ export default function Login() {
             className="w-full border-b-2 border-gray-300 focus:border-indigo-700 outline-none py-2 mb-6 text-gray-700"
           />
 
-          {/* Contraseña con icono */}
+          {/* Contraseña */}
           <div className="relative mb-6">
             <input
               type={showPassword ? "text" : "password"}
@@ -126,15 +119,6 @@ export default function Login() {
           </div>
 
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-
-          <div className="flex justify-between items-center text-sm mb-6">
-            <label className="flex items-center text-gray-600">
-              <input type="checkbox" className="mr-2" /> Recuérdame
-            </label>
-            <a href="#" className="text-indigo-700 hover:underline">
-              ¿Has olvidado tu contraseña?
-            </a>
-          </div>
 
           <button
             onClick={handleLogin}
