@@ -29,15 +29,24 @@ export default function Login() {
       const data = await response.json();
       console.log("✅ Login exitoso:", data);
 
-      // Guardar TODO en localStorage
-      localStorage.setItem("credentials", JSON.stringify(data.credentials));
-      localStorage.setItem("statistics", JSON.stringify(data.statistics));
-      localStorage.setItem("remote_response", JSON.stringify(data.remote_response));
+      // Guardar datos en localStorage
+      if (data.credentials) {
+        localStorage.setItem("credentials", JSON.stringify(data.credentials));
+      }
+      if (data.statistics) {
+        localStorage.setItem("statistics", JSON.stringify(data.statistics));
+      }
+      if (data.remote_response) {
+        localStorage.setItem("remote_response", JSON.stringify(data.remote_response));
+      }
       if (data.progress_response) {
         localStorage.setItem("progress_response", JSON.stringify(data.progress_response));
       }
+      if (data.final_statistics) {
+        localStorage.setItem("final_statistics", JSON.stringify(data.final_statistics));
+      }
 
-      // También guardar todo junto si lo necesitas
+      // También guardar todo junto
       localStorage.setItem("loginData", JSON.stringify(data));
 
       // Redirigir al dashboard

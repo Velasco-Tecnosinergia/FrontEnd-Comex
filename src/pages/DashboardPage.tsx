@@ -17,9 +17,11 @@ export default function Dashboard() {
   useEffect(() => {
     const remoteResponse = localStorage.getItem("remote_response");
     const progressResponse = localStorage.getItem("progress_response");
+    const finalStatistics = localStorage.getItem("final_statistics");
 
     console.log("📌 Remote Response:", remoteResponse ? JSON.parse(remoteResponse) : null);
     console.log("📌 Progress Response:", progressResponse ? JSON.parse(progressResponse) : null);
+    console.log("📊 Final Statistics:", finalStatistics ? JSON.parse(finalStatistics) : null);
   }, []);
 
   return (
