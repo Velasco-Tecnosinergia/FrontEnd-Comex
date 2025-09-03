@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Card from "../components/Card";
 import BarChartCard from "../components/BarChartCard";
@@ -13,6 +13,7 @@ import { pieData3 } from "../data/pieData3";
 import { pieData4 } from  "../data/pieData4"
 
 export default function Dashboard() {
+  const [cardsData, setCardsData] = useState<any[]>([]);
 
   useEffect(() => {
     const remoteResponse = localStorage.getItem("remote_response");
@@ -22,17 +23,36 @@ export default function Dashboard() {
     console.log("📌 Remote Response:", remoteResponse ? JSON.parse(remoteResponse) : null);
     console.log("📌 Progress Response:", progressResponse ? JSON.parse(progressResponse) : null);
     console.log("📊 Final Statistics:", finalStatistics ? JSON.parse(finalStatistics) : null);
+
+    if (finalStatistics) {
+      const parsed = JSON.parse(finalStatistics);
+      const passengerInfos = parsed?.Response?.Data?.PassengerFlowInfos || [];
+      setCardsData(passengerInfos.slice(1, 5)); // solo las primeras 4 cámaras
+    }
   }, []);
 
   return (
     <DashboardLayout title="Dashboard de Usuario">
       <h1 className="text-2xl font-bold mb-2 text-indigo-900">Dashboard Principal</h1>
-      {/* Cards */}
+
+      {/* Cards dinámicas */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <Card title="Camara 1" value="1,002,500" />
-        <Card title="Camara 2" value="1,100,900" />
-        <Card title="Camara 3" value="1,050,900" />
-        <Card title="Camara 4" value="987,500" />
+        {cardsData.length > 0 ? (
+          cardsData.map((info: any, idx: number) => (
+            <Card
+              key={idx}
+              title={`Cámara ${info.ID}`}
+              value={info.EnterCountList[0]}
+            />
+          ))
+        ) : (
+          <>
+            <Card title="Cámara 1" value="-" />
+            <Card title="Cámara 2" value="-" />
+            <Card title="Cámara 3" value="-" />
+            <Card title="Cámara 4" value="-" />
+          </>
+        )}
       </div>
 
       {/* Gráficas */}
