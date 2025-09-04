@@ -30,6 +30,9 @@ export default function Dashboard() {
   const [barChartData, setBarChartData] = useState<any[]>([]);
   const [lineChartData, setLineChartData] = useState<any[]>([]);
 
+  // ⬇️ nuevo: cámara seleccionada para la BARRA (default 4)
+  const [selectedCamera, setSelectedCamera] = useState<number>(4);
+
   // 🔹 YYYY-MM-DD en horario LOCAL (no UTC)
   const toYMDLocal = (d: Date) => {
     const y = d.getFullYear();
@@ -61,6 +64,20 @@ export default function Dashboard() {
     return raw.charAt(0).toUpperCase() + raw.slice(1);
   };
 
+  // ⬇️ nuevo: construye los datos de la barra para la cámara elegida
+  const buildBarChartData = (camera?: ProcessedStat) => {
+    const last7 = getLast7Days();
+    return last7.map(({ date, ymd }) => {
+      const found = camera?.Daily?.find((d: DailyStat) => d.day === ymd);
+      return {
+        name: getDayName(date),
+        Llegaron: found ? found.enter : 0,
+        Dejaron: found ? found.exit : 0,
+        Presentes: found ? found.present : 0,
+      };
+    });
+  };
+
   useEffect(() => {
     axios.get("http://localhost:8000/statistics/latest")
       .then(res => {
@@ -68,21 +85,9 @@ export default function Dashboard() {
         const processed: ProcessedStat[] = res.data.processed_statistics || [];
         setCardsData(processed);
 
-        // --- BarChart con cámara 4 ---
+        // --- BarChart con cámara 4 por defecto ---
         const cam4 = processed.find((c: ProcessedStat) => c.ID === 4);
-        if (cam4?.Daily) {
-          const last7 = getLast7Days();
-          const formatted = last7.map(({ date, ymd }) => {
-            const found = cam4.Daily?.find((d: DailyStat) => d.day === ymd);
-            return {
-              name: getDayName(date),
-              Llegaron: found ? found.enter : 0,
-              Dejaron: found ? found.exit : 0,
-              Presentes: found ? found.present : 0,
-            };
-          });
-          setBarChartData(formatted);
-        }
+        setBarChartData(buildBarChartData(cam4));
 
         // --- LineChart: ENERO → DICIEMBRE del año del documento ---
         const cam5 = processed.find((c: ProcessedStat) => c.ID === 5);
@@ -113,6 +118,13 @@ export default function Dashboard() {
       });
   }, []);
 
+  // ⬇️ nuevo: cuando cambia la cámara seleccionada, recalculamos la barra
+  useEffect(() => {
+    if (cardsData.length === 0) return;
+    const cam = cardsData.find((c) => c.ID === selectedCamera);
+    setBarChartData(buildBarChartData(cam));
+  }, [selectedCamera, cardsData]);
+
   return (
     <DashboardLayout title="Dashboard de Usuario">
       <h1 className="text-2xl font-bold mb-2 text-indigo-900">Dashboard Principal</h1>
@@ -137,9 +149,25 @@ export default function Dashboard() {
         )}
       </div>
 
+      {/* ⬇️ nuevo: selector de cámara para la gráfica de barras */}
+      <div className="mb-2">
+        <label className="mr-2 font-semibold text-indigo-900">Selecciona cámara:</label>
+        <select
+          value={selectedCamera}
+          onChange={(e) => setSelectedCamera(Number(e.target.value))}
+          className="border rounded px-2 py-1"
+        >
+          {cardsData.map((cam) => (
+            <option key={cam.ID} value={cam.ID}>
+              Cámara {cam.ID}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Gráficas */}
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
-        <BarChartCard title="Clientes (últimos 7 días - Cámara 4)" data={barChartData} />
+        <BarChartCard title={`Clientes (últimos 7 días - Cámara ${selectedCamera})`} data={barChartData} />
         <LineChartCard title="Entradas mensuales (Cámaras 4 y 5)" data={lineChartData} />
       </div>
 
