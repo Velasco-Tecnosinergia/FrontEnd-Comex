@@ -2,7 +2,11 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
 
 interface LineChartCardProps {
   title: string;
-  data: any[];
+  data: Array<{
+    name: string;    // Mes (p. ej. "Septiembre 2025")
+    Camara4: number; // total de entradas del mes
+    Camara5: number; // total de entradas del mes
+  }>;
 }
 
 export default function LineChartCard({ title, data }: LineChartCardProps) {
@@ -16,7 +20,8 @@ export default function LineChartCard({ title, data }: LineChartCardProps) {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="Clientes" stroke="#016630" strokeWidth={3} />
+          <Line type="monotone" dataKey="Camara4" name="Cámara 4" stroke="#016630" strokeWidth={3} dot={false} />
+          <Line type="monotone" dataKey="Camara5" name="Cámara 5" stroke="#1f6feb" strokeWidth={3} dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>
